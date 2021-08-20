@@ -1,3 +1,0 @@
-[submodule "django-heroku"]
-	path = django-heroku
-	url = https://github.com/heroku/django-heroku
