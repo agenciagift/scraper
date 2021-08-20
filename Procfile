@@ -1,1 +1,1 @@
-web: python manage.py runserver 0.0.0.0:$PORT
+web: gunicorn --workers=4 --chdir={{ project_name }} {{ project_name }}.wsgi:application
