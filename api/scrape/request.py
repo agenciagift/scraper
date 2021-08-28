@@ -1,6 +1,6 @@
 from api.scrape.util import clear_html, scrape_html
 from urllib.request import Request, urlopen
-from urllib.error import HTTPError, URLError
+from urllib.error import ContentTooShortError, HTTPError, URLError
 
 import ssl
 import certifi
@@ -13,7 +13,6 @@ def get_page_data(url):
     if not url:
         return {
             'status': 204,
-            'response_text': None,
             'error': 'Url not defined.'
         }
 
@@ -27,16 +26,22 @@ def get_page_data(url):
             'error': None,
         }
 
+    except ContentTooShortError as e:
+        return {
+            'status': 400,
+            'error': str(e)
+        }
+
     except HTTPError as e:
         return {
             'status': e.status,
-            'error': e.reason,
+            'error': str(e.reason),
         }
 
     except URLError as e:
         return {
             'status': 400,
-            'error': e.reason,
+            'error': str(e.reason),
         }
 
     except ValueError as e:
