@@ -16,7 +16,7 @@ def smart_truncate(content, length=100, suffix='...'):
 def get_meta_content(soup, name):
     content = ''
     for meta in soup.find_all('meta'):
-        if meta.get('name') == name:
+        if meta.get('name') == name or meta.get('property') == name:
             content = meta.get('content')
 
     return content
@@ -46,9 +46,11 @@ def get_soup_image(soup):
         image_element = soup.find('img')
 
         if not image_element:
-            return ''
+            image = ''
 
-        return image_element.get('src')
+        image = image_element.get('src')
+
+    return image
 
 
 def scrape_html(html):
