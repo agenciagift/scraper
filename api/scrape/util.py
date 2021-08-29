@@ -35,7 +35,11 @@ def get_description(soup):
     description = get_meta_content(soup, 'description')
 
     if not description:
-        body_text = soup.find('body').get_text()
+        body = soup.find('body')
+        if body:
+            body_text = body.get_text()
+        else:
+            body_text = ''
         description = smart_truncate(body_text, length=220)
 
     return description
