@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from urllib.parse import urlparse
 
 
 def clear_html(html):
@@ -63,6 +64,12 @@ def absolute_path(path, base):
         return path
 
     base = str(base)
+
+    if path.startswith('/'):
+        parse_result = urlparse(base)
+        print('PARSE RESULT', parse_result)
+        base = base.replace(parse_result.path, '')
+
     return base.rstrip('/') + '/' + path.lstrip('/')
 
 
