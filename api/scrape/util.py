@@ -51,7 +51,19 @@ def get_img_source(soup):
 
 
 def get_image(soup):
-    return get_meta_content(soup, 'og:image') or get_img_source(soup)
+    src = get_meta_content(soup, 'og:image')
+
+    if not src:
+        return get_img_source(soup)
+
+    if (
+        src.startswith('http://') or
+        src.startswith('https://') or
+        src.startswith('/')
+    ):
+        return src
+
+    return '/' + src
 
 
 def absolute_path(path, base):
