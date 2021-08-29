@@ -1,4 +1,4 @@
-from api.scrape.util import clear_html, scrape_html
+from api.scrape.util import absolute_path, clear_html, scrape_html
 from urllib.request import Request, urlopen
 from urllib.error import ContentTooShortError, HTTPError, URLError
 
@@ -20,9 +20,11 @@ def get_page_data(url):
         req = Request(url, headers = headers)
         response = urlopen(req, context = ssl_context)
         html = clear_html(response.read())
+        data = scrape_html(html)
+        data['image'] = absolute_path(data['image'], url)
         return {
             'status': 200,
-            'data': scrape_html(html),
+            'data': data,
             'error': None,
         }
 

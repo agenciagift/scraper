@@ -53,6 +53,19 @@ def get_image(soup):
     return get_meta_content(soup, 'og:image') or get_img_source(soup)
 
 
+def absolute_path(path, base):
+    if not path:
+        return path
+
+    path = str(path)
+
+    if path.startswith('http://') or path.startswith('https://'):
+        return path
+
+    base = str(base)
+    return base.rstrip('/') + '/' + path.lstrip('/')
+
+
 def scrape_html(html):
     soup = BeautifulSoup(html, 'html.parser')
 
