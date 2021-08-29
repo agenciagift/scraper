@@ -72,7 +72,15 @@ def absolute_path(path, base):
 
     path = str(path)
 
-    if path.startswith('http://') or path.startswith('https://'):
+    if (
+        path.startswith('http://') or
+        path.startswith('https://') or
+        path.startswith('data:image/png;base64,') or
+        path.startswith('data:text/plain;base64,') or
+        path.startswith('data:text/html;charset=US-ASCII,') or
+        path.startswith('data:text/html,') or
+        path.startswith('data:,')
+    ):
         return path
 
     base = str(base)
