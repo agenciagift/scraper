@@ -23,14 +23,14 @@ def get_meta_content(soup, name):
     return content
 
 
-def get_soup_title(soup):
+def get_title(soup):
     if not soup.title:
         return ''
 
     return soup.title.string or ''
 
 
-def get_soup_description(soup):
+def get_description(soup):
     description = get_meta_content(soup, 'description')
 
     if not description:
@@ -49,18 +49,15 @@ def get_img_source(soup):
         return ''
 
 
-def get_soup_image(soup):
+def get_image(soup):
     return get_meta_content(soup, 'og:image') or get_img_source(soup)
 
 
 def scrape_html(html):
     soup = BeautifulSoup(html, 'html.parser')
-    title = get_soup_title(soup)
-    description = get_soup_description(soup)
-    image = get_soup_image(soup)
 
     return {
-        'title': title,
-        'description': description,
-        'image': image,
+        'title': get_title(soup),
+        'description': get_description(soup),
+        'image': get_image(soup),
     }
