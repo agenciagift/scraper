@@ -45,29 +45,27 @@ def get_description(soup):
     return description
 
 
-def get_img_source(soup):
-    image_element = soup.find('img')
-
+def get_img_source(image_element):
     if image_element:
         return image_element.get('src')
     else:
         return ''
 
 
-def get_image(soup):
-    src = get_meta_content(soup, 'og:image')
+def get_all_images(soup, base):
+    path_list = []
+    og_image = get_meta_content(soup, 'og:image')
 
-    if not src:
-        return get_img_source(soup)
+    if (og_image):
+        path_list.append(og_image)
 
-    if (
-        src.startswith('http://') or
-        src.startswith('https://') or
-        src.startswith('/')
-    ):
-        return src
+    for element in soup.find_all('img'):
+        img_source = get_img_source(element)
+        abs_path = absolute_path(img_source, base)
+        if (img_source and abs_path not in path_list):
+            path_list.append(abs_path)
 
-    return '/' + src
+    return path_list
 
 
 def absolute_path(path, base):
@@ -92,17 +90,16 @@ def absolute_path(path, base):
 
     if path.startswith('/'):
         parse_result = urlparse(base)
-        print('PARSE RESULT', parse_result)
         base = base.replace(parse_result.path, '')
 
     return base.rstrip('/') + '/' + path.lstrip('/')
 
 
-def scrape_html(html):
+def scrape_html(html, base):
     soup = BeautifulSoup(html, 'html.parser')
 
     return {
         'title': get_title(soup),
         'description': get_description(soup),
-        'image': get_image(soup),
+        'images': get_all_images(soup, base),
     }

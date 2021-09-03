@@ -20,8 +20,7 @@ def get_page_data(url):
         req = Request(url, headers = headers)
         response = urlopen(req, context = ssl_context)
         html = clear_html(response.read())
-        data = scrape_html(html)
-        data['image'] = absolute_path(data['image'], url)
+        data = scrape_html(html, url)
         return {
             'status': 200,
             'data': data,
